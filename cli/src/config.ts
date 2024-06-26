@@ -426,7 +426,12 @@ async function determineAndroidStudioPath(os: OS): Promise<string> {
 
   switch (os) {
     case OS.Mac:
-      return '/Applications/Android Studio.app';
+      const systemWideInstallationPath = '/Applications/Android Studio.app';
+      const userInstallationPath = '$HOME/Applications/Android Studio.app';
+
+      return await pathExists(userInstallationPath)
+        ? userInstallationPath
+        : systemWideInstallationPath;
     case OS.Windows: {
       const { runCommand } = await import('./util/subprocess');
 
